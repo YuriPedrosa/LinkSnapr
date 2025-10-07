@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinkSnap - Encurtador de URL</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    input[type="url"] {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    button {
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #e9ecef;
+      border-radius: 4px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>LinkSnap</h1>
+    <p>Encurte suas URLs longas e chatas em links curtos e elegantes!</p>
+    <form id="shortenForm">
+      <input type="url" id="originalUrl" placeholder="Cole sua URL aqui (ex: https://www.exemplo.com)" required>
+      <button type="submit">Encurtar!</button>
+    </form>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    document.getElementById('shortenForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const originalUrl = document.getElementById('originalUrl').value;
+      const resultDiv = document.getElementById('result');
+
+      try {
+        const response = await fetch('/api/shorten', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ originalUrl })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          resultDiv.innerHTML = `<p><strong>URL encurtada:</strong> <a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a></p><p>${data.message}</p>`;
+        } else {
+          resultDiv.innerHTML = `<p style="color: red;">Erro: ${data.error}</p>`;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = '<p style="color: red;">Erro ao conectar ao servidor.</p>';
+      }
+
+      resultDiv.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
