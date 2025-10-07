@@ -17,7 +17,7 @@ Inspirado em ferramentas como Bitly, mas com foco em simplicidade e privacidade.
 - **Expiração de Links**: Defina data de expiração para links temporários.
 - **Segurança**: Rate limiting, headers seguros, HTTPS forçado em produção.
 - **Logging**: Logs estruturados com Winston para monitoramento.
-- **Interface Simples**: Página HTML básica para testes (fácil de substituir por React/Vue).
+- **Interface Web**: Aplicação React moderna para encurtar URLs e visualizar analytics.
 
 ## 📋 Pré-requisitos
 
@@ -83,11 +83,36 @@ Para usar MongoDB e Redis locais via Docker em vez do Atlas:
    - O servidor inicia em `http://localhost:3000`.
    - Para produção: `npm start`.
 
+### Build do Client
+
+O client é uma aplicação React construída com Vite.
+
+1. Navegue para o diretório client:
+
+   ```bash
+   cd client
+   ```
+
+2. Instale as dependências:
+
+   ```bash
+   npm install
+   ```
+
+3. Execute o build para produção:
+   ```bash
+   npm run build
+   ```
+   - Os arquivos otimizados serão gerados em `client/dist/`.
+   - Para preview local: `npm run preview`.
+   - Para desenvolvimento: `npm run dev`.
+
 ## 📖 Uso
 
-### Via Interface Web (para testes)
+### Via Interface Web
 
-- Acesse `http://localhost:3000`.
+- Acesse `http://localhost:3000` (servidor) ou execute o client separadamente.
+- Para o client React: Navegue para `client/`, execute `npm run dev` para desenvolvimento ou `npm run build` para produção.
 - Cole uma URL no formulário e clique em "Encurtar!".
 - Exemplo: Encurte `https://www.google.com` e receba algo como `http://localhost:3000/abc123`.
 - Clique no link curto para redirecionar e ver o analytics no banco.
@@ -148,6 +173,11 @@ Use ferramentas como Postman, curl ou fetch em JS.
 
 ```
 linksnap/
+├── client/            # Aplicação frontend React com Vite
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   └── vite.config.js
 ├── server.js          # Servidor principal (Express + MongoDB)
 ├── models/
 │   └── Url.js         # Schema Mongoose para URLs
